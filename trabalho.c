@@ -229,6 +229,86 @@ void incluirUsuarios(){
     return 0;
 }
 
+void editarUsuario(){
+    char emailValor[2][TAMANHO_MAXIMO];
+    int valorVacina;
+    float valorAltura;
+    getchar();
+
+    printf("Qual o e-mail do usuário que você deseja editar? ");
+    fgets(emailValor[0], 100, stdin);
+
+    while(strchr(emailValor,'@') == NULL){
+        printf("Digitação inválida! Digite um e-mail válido: ");
+        fgets(emailValor, 100, stdin);
+        emailValor[0][strcspn(emailValor[0], "\n")] = '\0';
+    }
+
+    int i = recuperaDadosPeloEmail(emailValor[0]); 
+    
+    if(i!=-1){
+
+        printf("Digite o nome do usuário %d: ",i);
+        fgets(nomeCompleto[i], 100, stdin);
+
+        nomeCompleto[i][strcspn(nomeCompleto[i], "\n")] = '\0';
+
+        printf("Digite o e-mail do usuário %d: ",i);
+        fgets(email[i], 100, stdin);
+
+        while(strchr(email[i],'@') == NULL){
+            printf("Digitação inválida! Digite um e-mail válido: ");
+            fgets(email[i], 100, stdin);
+            email[i][strcspn(email[i], "\n")] = '\0';
+        }
+
+        email[i][strcspn(email[i], "\n")] = '\0';
+
+        printf("Digite o sexo do usuário (Feminino, Masculino e Indiferente) %d: ",i);
+        fgets(sexo[i], 100, stdin);
+        sexo[i][strcspn(sexo[i], "\n")] = '\0';
+
+        while(strcmp(sexo[i],"Feminino")!=0 && strcmp(sexo[i],"Masculino")!=0 && strcmp(sexo[i],"Indiferente")!=0){
+            printf("Digitação inválida! Digite conforme está emntre parenteses. (Feminino, Masculino e Indiferente): ",i);
+            fgets(sexo[i], 100, stdin);
+            sexo[i][strcspn(sexo[i], "\n")] = '\0';
+        }
+
+        printf("Digite o endereço do usuário %d: ",i);
+        fgets(endereco[i], 100, stdin);
+
+        endereco[i][strcspn(endereco[i], "\n")] = '\0';
+
+        printf("Digite a altura do usuário %d: ",i);
+        scanf("%f",&valorAltura);
+
+        while(valorAltura < 1 || valorAltura > 2){
+            printf("Altura inválida! Digite um valor válido entre 1 e 2 metros: ");
+            scanf("%f",&valorAltura);
+        }
+
+        altura[i] = valorAltura;
+
+        printf("Digite (1) para se o usuário tomou vacina ou (0) se o usuário não tomou vacina: ");
+        scanf("%i",&valorVacina);
+
+        while (valorVacina != 0 && valorVacina != 1)
+        {
+            printf("Digite (1) para se o usuário tomou vacina ou (0) se o usuário não tomou vacina: ");
+            scanf("%i",&valorVacina);
+        }
+
+        vacina[i] = valorVacina;
+
+        getchar();
+    }
+    else{
+        printf("Nenhum usuário encontrado!");
+    }
+
+    int tamanho = retornaTamanhoVetor();
+    menu(tamanho);
+}
 
 int geraID(ids, i){
     int numeroGerado;
