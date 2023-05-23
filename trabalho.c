@@ -30,7 +30,7 @@ void menu(int quantidade){
         {
             case '1':
                 printf("\n");
-                incluirUsuarios();
+                incluirUsuarios(quantidade);
                 break;
 
             case '2':
@@ -178,14 +178,14 @@ void menu(int quantidade){
     }
 }
 
-void incluirUsuarios(){
-    int i = 0, valorVacina, contadorPergunta = 0;
-    char *encerrarAlgoritmo;
+void incluirUsuarios(quantidadeUsuarios){
+    int i = quantidadeUsuarios, valorVacina, contadorPergunta = 0;
+    char encerrarAlgoritmo;
     float valorAltura;
 
     getchar();
 
-    while(i<4){
+    while(i<1000){
         
         while(verificaNumero(ids,i,geraID(ids,i)) == 1){
             geraID(ids,i);
@@ -245,16 +245,15 @@ void incluirUsuarios(){
 
         vacina[i] = valorVacina;
 
-        getchar();
 
-        /*if(contadorPergunta == 0){
-            printf("\nDeseja parar de incluir usuários agora? (Sim) para sim, (Nao) para não. ");
-            scanf("%s",&encerrarAlgoritmo);       
-            encerrarAlgoritmo[strcspn(encerrarAlgoritmo, "\n")] = '\0';
+        if(contadorPergunta == 0){
+            getchar();
+            printf("\nDeseja parar de incluir usuários agora? (S) para sim. ");
+            scanf(" %c",&encerrarAlgoritmo);
 
-            if(strcmp(encerrarAlgoritmo,"Sim")==0){
+            if(encerrarAlgoritmo == 'S'){
+                printf("Encerrando a inclusão de novos usuários!\n");
                 break;
-                i = 1000;
             } else{
                 printf("Deseja incluir quantos funcionários no mínimo até que eu faça essa pergunta novamente? ");
                 scanf("%i",&contadorPergunta);
@@ -264,15 +263,17 @@ void incluirUsuarios(){
                     scanf("%i",&contadorPergunta);
                 }
             }
-        }*/
+        }
         
         contadorPergunta--;
         i++;
 
         getchar();
     }
+
+    int tamanho = retornaTamanhoVetor(); 
     
-    menu(i);
+    menu(tamanho);
     return 0;
 }
 
