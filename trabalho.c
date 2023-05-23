@@ -319,6 +319,23 @@ void imprimirUsuarios(){
     menu(tamanho);
 }
 
+void retornaDadosPessoaPeloEmail(int posicao){
+    int tamanho = retornaTamanhoVetor();
+    printf("Id: %d\nNome: %s\nEmail: %s\nSexo: %s\nEndereço: %s\nAltura: %.2f\nVacina: %d", ids[posicao], nomeCompleto[posicao], email[posicao], sexo[posicao], endereco[posicao], altura[posicao], vacina[posicao]);
+    menu(tamanho);
+}
+
+int recuperaDadosPeloEmail(char emailParaRecuperar[100]){
+    int tamanho = retornaTamanhoVetor();
+    emailParaRecuperar[strcspn(emailParaRecuperar, "\n")] = '\0';
+    for(int k = 0; k<tamanho ;k++){
+        if(strcmp(emailParaRecuperar, email[k]) == 0){
+            return k;
+        }
+    }
+    return -1;
+}
+
 int geraID(ids, i){
     int numeroGerado;
     numeroGerado = rand();
