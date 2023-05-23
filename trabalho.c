@@ -4,9 +4,10 @@
 #include <locale.h>
 
 #define TAMANHO_MAXIMO 100
-int ids[1000], vacina[1000];
+int ids[1000], vacina[1000], idsBackup[1000], vacinaBackup[1000];
 char nomeCompleto[1000][TAMANHO_MAXIMO], email[1000][TAMANHO_MAXIMO], sexo[1000][TAMANHO_MAXIMO], endereco[1000][TAMANHO_MAXIMO];
-double altura[1000];
+char nomeCompletoBackup[1000][TAMANHO_MAXIMO], emailBackup[1000][TAMANHO_MAXIMO], sexoBackup[1000][TAMANHO_MAXIMO], enderecoBackup[1000][TAMANHO_MAXIMO];
+double altura[1000], alturaBackup[1000];
 
 int main(){
     menu(0);
@@ -88,12 +89,12 @@ void menu(int quantidade){
         
             case '6':
                 printf("\n");
-                //fazerBackupUsuarios();
+                fazerBackupUsuarios();
                 break;
 
             case '7':
                 printf("\n");
-                //restaurarUsuarios();
+                restaurarDados();
                 break;
 
             default:
@@ -160,12 +161,12 @@ void menu(int quantidade){
                 
                     case '6':
                         printf("\n");
-                        //fazerBackupUsuarios();
+                        fazerBackupUsuarios();
                         break;
 
                     case '7':
                         printf("\n");
-                        //restaurarUsuarios();
+                        restaurarDados();
                         break;
 
                     default:
@@ -396,6 +397,38 @@ void imprimirUsuarios(){
     menu(tamanho);
 }
 
+void fazerBackupUsuarios(){
+    int tamanho = retornaTamanhoVetor();
+    for(int l=0; l<tamanho;l++){
+        idsBackup[l] = ids[l];
+        strcpy(nomeCompletoBackup[l], nomeCompleto[l]);
+        strcpy(emailBackup[l], email[l]);
+        strcpy(sexoBackup[l], sexo[l]);
+        strcpy(enderecoBackup[l], endereco[l]);
+        alturaBackup[l] = altura[l];
+        vacinaBackup[l] = vacina[l];
+    }
+
+    printf("Backup feito com sucesso!");
+    menu(tamanho);
+}
+
+void restaurarDados(){
+    int tamanho = retornaTamanhoVetorBackup();
+    for(int z=0; z<tamanho;z++){
+        ids[z] = idsBackup[z];
+        strcpy(nomeCompleto[z], nomeCompletoBackup[z]);
+        strcpy(email[z], emailBackup[z]);
+        strcpy(sexo[z], sexoBackup[z]);
+        strcpy(endereco[z], enderecoBackup[z]);
+        altura[z] = alturaBackup[z];
+        vacina[z] = vacinaBackup[z];
+    }
+    printf("Restauração concluida com sucesso!");
+    menu(tamanho);
+}
+
+
 int recuperaDadosPeloEmail(char emailParaRecuperar[100]){
     int tamanho = retornaTamanhoVetor();
     emailParaRecuperar[strcspn(emailParaRecuperar, "\n")] = '\0';
@@ -429,6 +462,17 @@ int retornaTamanhoVetor(){
     int contador = 0;
     for(int j=0;j<1000;j++){
         if(altura[j]>=1){
+            contador++;
+        } else{
+            return contador;
+        }
+    }
+}
+
+void retornaTamanhoVetorBackup(){
+    int contador = 0;
+    for(int j=0;j<1000;j++){
+        if(alturaBackup[j]>=1){
             contador++;
         } else{
             return contador;
