@@ -13,35 +13,53 @@ int main(){
     return 0;
 }
 
-int menu(int quantidade){
+void menu(int quantidade){
     setlocale(LC_ALL, "Portuguese");
-    int opcao;
+    char opcao;
     char recuperarEmail[100];
+    int valorEmail;
 
     printf("\nBem vindo ao sistema CRUD! Acesse alguma das seguintes opções para prosseguir: \n--------------------------------------------------------------------------------\n");
     printf("(1) - Incluir usuários; Máximo permitido: 1000. \n(2) - Editar um usuário.\n(3) - Excluir um usuário.\n(4) - Buscar um usuário pelo e-mail.\n(5) - Imprimir todos os usuários cadastrados.\n(6) - Fazer um backup de todos os usuários cadastrados.\n(7) - Fazer a restauração dos dados.\n--------------------------------------------------------------------------------");
     printf("\nO que vai ser hoje? ");
     
     if(quantidade < 1000){
-        scanf("%i",&opcao);
+        scanf(" %c",&opcao);
         switch (opcao)
         {
-            case 1:
+            case '1':
                 printf("\n");
                 incluirUsuarios();
                 break;
 
-            case 2:
+            case '2':
                 printf("\n");
                 editarUsuario();
                 break;
         
-            case 3:
+            case '3':
+                getchar();
                 printf("\n");
-                excluirUsuario();
+                printf("Qual o e-mail do usuário que você deseja excluir? ");
+                fgets(recuperarEmail, 100, stdin);
+
+                while(strchr(recuperarEmail,'@') == NULL){
+                    printf("Digitação inválida! Digite um e-mail válido: ");
+                    fgets(recuperarEmail, 100, stdin);
+                    recuperarEmail[strcspn(recuperarEmail, "\n")] = '\0';
+                }
+
+                recuperarEmail[strcspn(recuperarEmail, "\n")] = '\0';
+
+                valorEmail = recuperaDadosPeloEmail(recuperarEmail);
+
+                if(valorEmail >= 0){
+                    excluirUsuario(valorEmail);
+                }
+                        
                 break;
 
-            case 4:
+            case '4':
                 getchar();
                 printf("\n");
                 printf("Digite o email que deseja recuperar: ");
@@ -55,7 +73,7 @@ int menu(int quantidade){
 
                 recuperarEmail[strcspn(recuperarEmail, "\n")] = '\0';
 
-                int valorEmail = recuperaDadosPeloEmail(recuperarEmail);
+                valorEmail = recuperaDadosPeloEmail(recuperarEmail);
 
                 if(valorEmail >= 0){
                     retornaDadosPessoaPeloEmail(valorEmail);
@@ -63,63 +81,91 @@ int menu(int quantidade){
                 
                 break;
 
-            case 5:
+            case '5':
                 printf("\n");
                 imprimirUsuarios();
                 break;
         
-            case 6:
+            case '6':
                 printf("\n");
-                fazerBackupUsuarios();
+                //fazerBackupUsuarios();
                 break;
 
-            case 7:
+            case '7':
                 printf("\n");
-                restaurarUsuarios();
+                //restaurarUsuarios();
                 break;
 
             default:
                 break;
         }
         } else{
-            opcao = 1;
-            while(opcao == 1){
-                scanf("%i",&opcao);
+            opcao = '1';
+            while(opcao == '1'){
+                scanf(" %c",&opcao);
                 switch (opcao)
                 {
-                    case 1:
+                    case '1':
                         printf("Quantidade máxima de usuários atingida! Tente novamente outra opção.\n");
                         printf("(1) - Incluir usuários; Máximo permitido: 1000. \n(2) - Editar um usuário.\n(3) - Excluir um usuário.\n(4) - Buscar um usuário pelo e-mail.\n(5) - Imprimir todos os usuários cadastrados.\n(6) - Fazer um backup de todos os usuários cadastrados.\n(7) - Fazer a restauração dos dados.\n--------------------------------------------------------------------------------");
                         printf("\nO que vai ser hoje? ");
                         break;
 
-                    case 2:
+                    case '2':
                         editarUsuario();
                         break;
                 
-                    case 3:
+                    case '3':
+                        getchar();
                         printf("\n");
-                        excluirUsuario();
+                        printf("Qual o e-mail do usuário que você deseja editar? ");
+                        fgets(recuperarEmail, 100, stdin);
+
+                        recuperarEmail[strcspn(recuperarEmail, "\n")] = '\0';
+
+                        valorEmail = recuperaDadosPeloEmail(recuperarEmail);
+
+                        if(valorEmail >= 0){
+                            excluirUsuario(valorEmail);
+                        }
+                        
                         break;
 
-                    case 4:
+                    case '4':
+                        getchar();
                         printf("\n");
-                        recuperaDadosPeloEmail("");
+                        printf("Digite o email que deseja recuperar: ");
+                        fgets(recuperarEmail, 100, stdin);
+
+                        while(strchr(recuperarEmail,'@') == NULL){
+                            printf("Digitação inválida! Digite um e-mail válido: ");
+                            fgets(recuperarEmail, 100, stdin);
+                            recuperarEmail[strcspn(recuperarEmail, "\n")] = '\0';
+                        }
+
+                        recuperarEmail[strcspn(recuperarEmail, "\n")] = '\0';
+
+                        valorEmail = recuperaDadosPeloEmail(recuperarEmail);
+
+                        if(valorEmail >= 0){
+                            retornaDadosPessoaPeloEmail(valorEmail);
+                        }
+                        
                         break;
 
-                    case 5:
+                    case '5':
                         printf("\n");
                         imprimirUsuarios();
                         break;
                 
-                    case 6:
+                    case '6':
                         printf("\n");
-                        fazerBackupUsuarios();
+                        //fazerBackupUsuarios();
                         break;
 
-                    case 7:
+                    case '7':
                         printf("\n");
-                        restaurarUsuarios();
+                        //restaurarUsuarios();
                         break;
 
                     default:
@@ -138,7 +184,7 @@ void incluirUsuarios(){
 
     getchar();
 
-    while(i<2){
+    while(i<4){
         
         while(verificaNumero(ids,i,geraID(ids,i)) == 1){
             geraID(ids,i);
@@ -310,18 +356,43 @@ void editarUsuario(){
     menu(tamanho);
 }
 
-void imprimirUsuarios(){
+void excluirUsuario(int posicao) {
     int tamanho = retornaTamanhoVetor();
-    for(int x=0;x<tamanho; x++){
-        printf("Id: %d\nNome: %s\nEmail: %s\nSexo: %s\nEndereço: %s\nAltura: %.2f\nVacina: %d", ids[x], nomeCompleto[x], email[x], sexo[x], endereco[x], altura[x], vacina[x]);
-        printf("\n");
+    
+    for (int m = posicao; m < tamanho - 1; m++) {
+        ids[m] = ids[m + 1];
+        strncpy(nomeCompleto[m], nomeCompleto[m + 1], 100);
+        strncpy(email[m], email[m + 1], 100);
+        strncpy(sexo[m], sexo[m + 1], 100);
+        strncpy(endereco[m], endereco[m + 1], 100);
+        altura[m] = altura[m + 1];
+        vacina[m] = vacina[m + 1];
     }
-    menu(tamanho);
+
+    ids[tamanho-1] = -1;
+    strcpy(nomeCompleto[tamanho-1], "");
+    strcpy(email[tamanho-1], "");
+    strcpy(sexo[tamanho-1], "");
+    strcpy(endereco[tamanho-1], "");
+    altura[tamanho-1] = -1;
+    vacina[tamanho-1] = -1;
+    
+    menu(tamanho - 1);
 }
+
 
 void retornaDadosPessoaPeloEmail(int posicao){
     int tamanho = retornaTamanhoVetor();
     printf("Id: %d\nNome: %s\nEmail: %s\nSexo: %s\nEndereço: %s\nAltura: %.2f\nVacina: %d", ids[posicao], nomeCompleto[posicao], email[posicao], sexo[posicao], endereco[posicao], altura[posicao], vacina[posicao]);
+    menu(tamanho);
+}
+
+void imprimirUsuarios(){
+    int tamanho = retornaTamanhoVetor();
+    for(int x=0;x<tamanho; x++){
+        printf("Id: %d\nNome: %s\nEmail: %s\nSexo: %s\nEndereço: %s\nAltura: %.2f\nVacina: %d\n", ids[x], nomeCompleto[x], email[x], sexo[x], endereco[x], altura[x], vacina[x]);
+        printf("\n");
+    }
     menu(tamanho);
 }
 
