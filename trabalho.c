@@ -310,6 +310,15 @@ void editarUsuario(){
     menu(tamanho);
 }
 
+void imprimirUsuarios(){
+    int tamanho = retornaTamanhoVetor();
+    for(int x=0;x<tamanho; x++){
+        printf("Id: %d\nNome: %s\nEmail: %s\nSexo: %s\nEndereço: %s\nAltura: %.2f\nVacina: %d", ids[x], nomeCompleto[x], email[x], sexo[x], endereco[x], altura[x], vacina[x]);
+        printf("\n");
+    }
+    menu(tamanho);
+}
+
 int geraID(ids, i){
     int numeroGerado;
     numeroGerado = rand();
