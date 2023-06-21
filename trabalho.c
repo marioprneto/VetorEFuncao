@@ -4,10 +4,18 @@
 #include <locale.h>
 
 #define TAMANHO_MAXIMO 100
-int ids[1000], vacina[1000], idsBackup[1000], vacinaBackup[1000];
-char nomeCompleto[1000][TAMANHO_MAXIMO], email[1000][TAMANHO_MAXIMO], sexo[1000][TAMANHO_MAXIMO], endereco[1000][TAMANHO_MAXIMO];
-char nomeCompletoBackup[1000][TAMANHO_MAXIMO], emailBackup[1000][TAMANHO_MAXIMO], sexoBackup[1000][TAMANHO_MAXIMO], enderecoBackup[1000][TAMANHO_MAXIMO];
-double altura[1000], alturaBackup[1000];
+typedef struct {
+    int ids;
+    char nomeCompleto[TAMANHO_MAXIMO];
+    char email[TAMANHO_MAXIMO];
+    char sexo[TAMANHO_MAXIMO];
+    char endereco[TAMANHO_MAXIMO];
+    double altura;
+    int vacina;
+} Usuario;
+
+Usuario usuarios[TAMANHO_MAXIMO];
+Usuario usuariosBackup[TAMANHO_MAXIMO];
 
 int main(){
     menu(0);
@@ -30,12 +38,12 @@ void menu(int quantidade){
         {
             case '1':
                 printf("\n");
-                incluirUsuarios(quantidade);
+                incluirusuarioss(quantidade);
                 break;
 
             case '2':
                 printf("\n");
-                editarUsuario();
+                editarusuarios();
                 break;
         
             case '3':
@@ -55,7 +63,7 @@ void menu(int quantidade){
                 valorEmail = recuperaDadosPeloEmail(recuperarEmail);
 
                 if(valorEmail >= 0){
-                    excluirUsuario(valorEmail);
+                    excluirusuarios(valorEmail);
                 }
                         
                 break;
@@ -84,12 +92,12 @@ void menu(int quantidade){
 
             case '5':
                 printf("\n");
-                imprimirUsuarios();
+                imprimirusuarioss();
                 break;
         
             case '6':
                 printf("\n");
-                fazerBackupUsuarios();
+                fazerBackupusuarioss();
                 break;
 
             case '7':
@@ -113,7 +121,7 @@ void menu(int quantidade){
                         break;
 
                     case '2':
-                        editarUsuario();
+                        editarusuarios();
                         break;
                 
                     case '3':
@@ -127,7 +135,7 @@ void menu(int quantidade){
                         valorEmail = recuperaDadosPeloEmail(recuperarEmail);
 
                         if(valorEmail >= 0){
-                            excluirUsuario(valorEmail);
+                            excluirusuarios(valorEmail);
                         }
                         
                         break;
@@ -156,12 +164,12 @@ void menu(int quantidade){
 
                     case '5':
                         printf("\n");
-                        imprimirUsuarios();
+                        imprimirusuarioss();
                         break;
                 
                     case '6':
                         printf("\n");
-                        fazerBackupUsuarios();
+                        fazerBackupusuarioss();
                         break;
 
                     case '7':
@@ -178,8 +186,8 @@ void menu(int quantidade){
     }
 }
 
-void incluirUsuarios(quantidadeUsuarios){
-    int i = quantidadeUsuarios, valorVacina, contadorPergunta = 0;
+void incluirusuarioss(quantidadeusuarioss){
+    int i = quantidadeusuarioss, valorVacina, contadorPergunta = 0;
     char encerrarAlgoritmo;
     float valorAltura;
 
@@ -187,42 +195,42 @@ void incluirUsuarios(quantidadeUsuarios){
 
     while(i<1000){
         
-        while(verificaNumero(ids,i,geraID(ids,i)) == 1){
-            geraID(ids,i);
+        while(verificaNumero(i,geraID(i)) == 1){
+            geraID(i);
         }
 
-        ids[i] = geraID(ids,i);
+        usuarios[i].ids = geraID(i);
 
         printf("Digite o nome do usuário %d: ",i);
-        fgets(nomeCompleto[i], 100, stdin);
+        fgets(usuarios[i].nomeCompleto, 100, stdin);
 
-        nomeCompleto[i][strcspn(nomeCompleto[i], "\n")] = '\0';
+        usuarios[i].nomeCompleto[strcspn(usuarios[i].nomeCompleto, "\n")] = '\0';
 
         printf("Digite o e-mail do usuário %d: ",i);
-        fgets(email[i], 100, stdin);
+        fgets(usuarios[i].email, 100, stdin);
 
-        while(strchr(email[i],'@') == NULL){
+        while(strchr(usuarios[i].email,'@') == NULL){
             printf("Digitação inválida! Digite um e-mail válido: ");
-            fgets(email[i], 100, stdin);
-            email[i][strcspn(email[i], "\n")] = '\0';
+            fgets(usuarios[i].email, 100, stdin);
+            usuarios[i].email[strcspn(usuarios[i].email, "\n")] = '\0';
         }
 
-        email[i][strcspn(email[i], "\n")] = '\0';
+        usuarios[i].email[strcspn(usuarios[i].email, "\n")] = '\0';
 
         printf("Digite o sexo do usuário (Feminino, Masculino e Indiferente) %d: ",i);
-        fgets(sexo[i], 100, stdin);
-        sexo[i][strcspn(sexo[i], "\n")] = '\0';
+        fgets(usuarios[i].sexo, 100, stdin);
+        usuarios[i].sexo[strcspn(usuarios[i].sexo, "\n")] = '\0';
 
-        while(strcmp(sexo[i],"Feminino")!=0 && strcmp(sexo[i],"Masculino")!=0 && strcmp(sexo[i],"Indiferente")!=0){
+        while(strcmp(usuarios[i].sexo,"Feminino")!=0 && strcmp(usuarios[i].sexo,"Masculino")!=0 && strcmp(usuarios[i].sexo,"Indiferente")!=0){
             printf("Digitação inválida! Digite conforme está emntre parenteses. (Feminino, Masculino e Indiferente): ",i);
-            fgets(sexo[i], 100, stdin);
-            sexo[i][strcspn(sexo[i], "\n")] = '\0';
+            fgets(usuarios[i].sexo, 100, stdin);
+            usuarios[i].sexo[strcspn(usuarios[i].sexo, "\n")] = '\0';
         }
 
         printf("Digite o endereço do usuário %d: ",i);
-        fgets(endereco[i], 100, stdin);
+        fgets(usuarios[i].endereco, 100, stdin);
 
-        endereco[i][strcspn(endereco[i], "\n")] = '\0';
+        usuarios[i].endereco[strcspn(usuarios[i].endereco, "\n")] = '\0';
 
         printf("Digite a altura do usuário %d: ",i);
         scanf("%f",&valorAltura);
@@ -232,7 +240,7 @@ void incluirUsuarios(quantidadeUsuarios){
             scanf("%f",&valorAltura);
         }
 
-        altura[i] = valorAltura;
+        usuarios[i].altura = valorAltura;
 
         printf("Digite (1) para se o usuário tomou vacina ou (0) se o usuário não tomou vacina: ");
         scanf("%i",&valorVacina);
@@ -243,7 +251,7 @@ void incluirUsuarios(quantidadeUsuarios){
             scanf("%i",&valorVacina);
         }
 
-        vacina[i] = valorVacina;
+        usuarios[i].vacina = valorVacina;
 
 
         if(contadorPergunta == 0){
@@ -277,7 +285,7 @@ void incluirUsuarios(quantidadeUsuarios){
     return 0;
 }
 
-void editarUsuario(){
+void editarusuarios(){
     char emailValor[2][TAMANHO_MAXIMO];
     int valorVacina;
     float valorAltura;
@@ -297,35 +305,35 @@ void editarUsuario(){
     if(i!=-1){
 
         printf("Digite o nome do usuário %d: ",i);
-        fgets(nomeCompleto[i], 100, stdin);
+        fgets(usuarios[i].nomeCompleto, 100, stdin);
 
-        nomeCompleto[i][strcspn(nomeCompleto[i], "\n")] = '\0';
+        usuarios[i].nomeCompleto[strcspn(usuarios[i].nomeCompleto, "\n")] = '\0';
 
         printf("Digite o e-mail do usuário %d: ",i);
-        fgets(email[i], 100, stdin);
+        fgets(usuarios[i].email, 100, stdin);
 
-        while(strchr(email[i],'@') == NULL){
+        while(strchr(usuarios[i].email,'@') == NULL){
             printf("Digitação inválida! Digite um e-mail válido: ");
-            fgets(email[i], 100, stdin);
-            email[i][strcspn(email[i], "\n")] = '\0';
+            fgets(usuarios[i].email, 100, stdin);
+            usuarios[i].email[strcspn(usuarios[i].email, "\n")] = '\0';
         }
 
-        email[i][strcspn(email[i], "\n")] = '\0';
+        usuarios[i].email[strcspn(usuarios[i].email, "\n")] = '\0';
 
         printf("Digite o sexo do usuário (Feminino, Masculino e Indiferente) %d: ",i);
-        fgets(sexo[i], 100, stdin);
-        sexo[i][strcspn(sexo[i], "\n")] = '\0';
+        fgets(usuarios[i].sexo, 100, stdin);
+        usuarios[i].sexo[strcspn(usuarios[i].sexo, "\n")] = '\0';
 
-        while(strcmp(sexo[i],"Feminino")!=0 && strcmp(sexo[i],"Masculino")!=0 && strcmp(sexo[i],"Indiferente")!=0){
+        while(strcmp(usuarios[i].sexo,"Feminino")!=0 && strcmp(usuarios[i].sexo,"Masculino")!=0 && strcmp(usuarios[i].sexo,"Indiferente")!=0){
             printf("Digitação inválida! Digite conforme está emntre parenteses. (Feminino, Masculino e Indiferente): ",i);
-            fgets(sexo[i], 100, stdin);
-            sexo[i][strcspn(sexo[i], "\n")] = '\0';
+            fgets(usuarios[i].sexo, 100, stdin);
+            usuarios[i].sexo[strcspn(usuarios[i].sexo, "\n")] = '\0';
         }
 
         printf("Digite o endereço do usuário %d: ",i);
-        fgets(endereco[i], 100, stdin);
+        fgets(usuarios[i].endereco, 100, stdin);
 
-        endereco[i][strcspn(endereco[i], "\n")] = '\0';
+        usuarios[i].endereco[strcspn(usuarios[i].endereco, "\n")] = '\0';
 
         printf("Digite a altura do usuário %d: ",i);
         scanf("%f",&valorAltura);
@@ -335,7 +343,7 @@ void editarUsuario(){
             scanf("%f",&valorAltura);
         }
 
-        altura[i] = valorAltura;
+        usuarios[i].altura = valorAltura;
 
         printf("Digite (1) para se o usuário tomou vacina ou (0) se o usuário não tomou vacina: ");
         scanf("%i",&valorVacina);
@@ -346,7 +354,7 @@ void editarUsuario(){
             scanf("%i",&valorVacina);
         }
 
-        vacina[i] = valorVacina;
+        usuarios[i].vacina = valorVacina;
 
         getchar();
     }
@@ -358,125 +366,123 @@ void editarUsuario(){
     menu(tamanho);
 }
 
-void excluirUsuario(int posicao) {
+void excluirusuarios(int posicao) {
     int tamanho = retornaTamanhoVetor();
     
     for (int m = posicao; m < tamanho - 1; m++) {
-        ids[m] = ids[m + 1];
-        strncpy(nomeCompleto[m], nomeCompleto[m + 1], 100);
-        strncpy(email[m], email[m + 1], 100);
-        strncpy(sexo[m], sexo[m + 1], 100);
-        strncpy(endereco[m], endereco[m + 1], 100);
-        altura[m] = altura[m + 1];
-        vacina[m] = vacina[m + 1];
+        usuarios[m].ids = usuariosBackup[m+1].ids;
+        strncpy(usuarios[m].nomeCompleto, usuarios[m + 1].nomeCompleto, 100);
+        strncpy(usuarios[m].email, usuarios[m + 1].email, 100);
+        strncpy(usuarios[m].sexo, usuarios[m + 1].sexo, 100);
+        strncpy(usuarios[m].endereco, usuarios[m + 1].endereco, 100);
+        usuarios[m].altura = usuarios[m+1].altura;
+        usuarios[m].vacina = usuarios[m+1].vacina;
     }
 
-    ids[tamanho-1] = -1;
-    strcpy(nomeCompleto[tamanho-1], "");
-    strcpy(email[tamanho-1], "");
-    strcpy(sexo[tamanho-1], "");
-    strcpy(endereco[tamanho-1], "");
-    altura[tamanho-1] = -1;
-    vacina[tamanho-1] = -1;
+    usuarios[tamanho-1].ids = -1;
+    strcpy(usuarios[tamanho-1].nomeCompleto, "");
+    strcpy(usuarios[tamanho-1].email, "");
+    strcpy(usuarios[tamanho-1].sexo, "");
+    strcpy(usuarios[tamanho-1].endereco, "");
+    usuarios[tamanho-1].altura = -1;
+    usuarios[tamanho-1].vacina = -1;
     
     menu(tamanho - 1);
 }
 
+int retornaTamanhoVetor(){
+    int contador = 0;
+    for(int j=0;j<1000;j++){
+        if(usuarios[j].altura>=1){
+            contador++;
+        } else{
+            return contador;
+        }
+    }
+}
 
 void retornaDadosPessoaPeloEmail(int posicao){
     int tamanho = retornaTamanhoVetor();
-    printf("Id: %d\nNome: %s\nEmail: %s\nSexo: %s\nEndereço: %s\nAltura: %.2f\nVacina: %d", ids[posicao], nomeCompleto[posicao], email[posicao], sexo[posicao], endereco[posicao], altura[posicao], vacina[posicao]);
+    printf("Id: %d\nNome: %s\nEmail: %s\nSexo: %s\nEndereço: %s\nAltura: %.2f\nVacina: %d", usuarios[posicao].ids, usuarios[posicao].nomeCompleto, usuarios[posicao].email, usuarios[posicao].sexo, usuarios[posicao].endereco, usuarios[posicao].altura, usuarios[posicao].vacina);
     menu(tamanho);
 }
 
-void imprimirUsuarios(){
+void imprimirusuarioss(){
     int tamanho = retornaTamanhoVetor();
     for(int x=0;x<tamanho; x++){
-        printf("Id: %d\nNome: %s\nEmail: %s\nSexo: %s\nEndereço: %s\nAltura: %.2f\nVacina: %d\n", ids[x], nomeCompleto[x], email[x], sexo[x], endereco[x], altura[x], vacina[x]);
+        printf("Id: %d\nNome: %s\nEmail: %s\nSexo: %s\nEndereço: %s\nAltura: %.2f\nVacina: %d\n", usuarios[x].ids, usuarios[x].nomeCompleto, usuarios[x].email, usuarios[x].sexo, usuarios[x].endereco, usuarios[x].altura, usuarios[x].vacina);
         printf("\n");
     }
     menu(tamanho);
 }
 
-void fazerBackupUsuarios(){
+void fazerBackupusuarioss(){
     int tamanho = retornaTamanhoVetor();
     for(int l=0; l<tamanho;l++){
-        idsBackup[l] = ids[l];
-        strcpy(nomeCompletoBackup[l], nomeCompleto[l]);
-        strcpy(emailBackup[l], email[l]);
-        strcpy(sexoBackup[l], sexo[l]);
-        strcpy(enderecoBackup[l], endereco[l]);
-        alturaBackup[l] = altura[l];
-        vacinaBackup[l] = vacina[l];
+        usuariosBackup[l].ids = usuarios[l].ids;
+        strcpy(usuariosBackup[l].nomeCompleto, usuarios[l].nomeCompleto);
+        strcpy(usuariosBackup[l].email, usuarios[l].email);
+        strcpy(usuariosBackup[l].sexo, usuarios[l].sexo);
+        strcpy(usuariosBackup[l].endereco, usuarios[l].endereco);
+        usuariosBackup[l].altura = usuarios[l].altura;
+        usuariosBackup[l].vacina = usuarios[l].vacina;
     }
 
     printf("Backup feito com sucesso!");
     menu(tamanho);
 }
 
+int retornaTamanhoVetorBackup(){
+    int contador = 0;
+    for(int j=0;j<1000;j++){
+        if(usuariosBackup[j].altura>=1){
+            contador++;
+        } else{
+            return contador;
+        }
+    }
+}
+
 void restaurarDados(){
     int tamanho = retornaTamanhoVetorBackup();
     for(int z=0; z<tamanho;z++){
-        ids[z] = idsBackup[z];
-        strcpy(nomeCompleto[z], nomeCompletoBackup[z]);
-        strcpy(email[z], emailBackup[z]);
-        strcpy(sexo[z], sexoBackup[z]);
-        strcpy(endereco[z], enderecoBackup[z]);
-        altura[z] = alturaBackup[z];
-        vacina[z] = vacinaBackup[z];
+        usuarios[z].ids = usuariosBackup[z].ids;
+        strcpy(usuarios[z].nomeCompleto, usuariosBackup[z].nomeCompleto);
+        strcpy(usuarios[z].email, usuariosBackup[z].email);
+        strcpy(usuarios[z].sexo, usuariosBackup[z].sexo);
+        strcpy(usuarios[z].endereco, usuariosBackup[z].endereco);
+        usuarios[z].altura = usuariosBackup[z].altura;
+        usuarios[z].vacina = usuariosBackup[z].vacina;
     }
     printf("Restauração concluida com sucesso!");
     menu(tamanho);
 }
 
-
 int recuperaDadosPeloEmail(char emailParaRecuperar[100]){
     int tamanho = retornaTamanhoVetor();
     emailParaRecuperar[strcspn(emailParaRecuperar, "\n")] = '\0';
     for(int k = 0; k<tamanho ;k++){
-        if(strcmp(emailParaRecuperar, email[k]) == 0){
+        if(strcmp(emailParaRecuperar, usuarios[k].email) == 0){
             return k;
         }
     }
     return -1;
 }
 
-int geraID(ids, i){
+int geraID(i){
     int numeroGerado;
     numeroGerado = rand();
-    while(verificaNumero(ids,i,numeroGerado) == 1){
+    while(verificaNumero(i,numeroGerado) == 1){
         numeroGerado = rand();
     }
     return numeroGerado;
 }
 
-int verificaNumero(int vetor[], int tamanho, int numero) {
+int verificaNumero(int tamanho, int numero) {
     for (int i = 0; i < tamanho; i++) {
-        if (vetor[i] == numero) {
+        if (usuarios[i].ids == numero) {
             return 1;
         }
     }
     return 0;
-}
-
-int retornaTamanhoVetor(){
-    int contador = 0;
-    for(int j=0;j<1000;j++){
-        if(altura[j]>=1){
-            contador++;
-        } else{
-            return contador;
-        }
-    }
-}
-
-void retornaTamanhoVetorBackup(){
-    int contador = 0;
-    for(int j=0;j<1000;j++){
-        if(alturaBackup[j]>=1){
-            contador++;
-        } else{
-            return contador;
-        }
-    }
 }
