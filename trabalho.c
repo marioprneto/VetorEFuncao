@@ -26,7 +26,7 @@ int main(){
 void menu(int quantidade){
     setlocale(LC_ALL, "Portuguese");
     char opcao;
-    char recuperarEmail[100];
+    char recuperarEmail[75];
     int valorEmail;
 
     printf("\nBem vindo ao sistema CRUD! Acesse alguma das seguintes opções para prosseguir: \n--------------------------------------------------------------------------------\n");
@@ -52,11 +52,11 @@ void menu(int quantidade){
                 getchar();
                 printf("\n");
                 printf("Qual o e-mail do usuário que você deseja excluir? ");
-                fgets(recuperarEmail, 100, stdin);
+                fgets(recuperarEmail, sizeof(usuarios[0].email), stdin);
 
                 while(strchr(recuperarEmail,'@') == NULL){
                     printf("Digitação inválida! Digite um e-mail válido: ");
-                    fgets(recuperarEmail, 100, stdin);
+                    fgets(recuperarEmail, sizeof(usuarios[0].email), stdin);
                     recuperarEmail[strcspn(recuperarEmail, "\n")] = '\0';
                 }
 
@@ -74,11 +74,11 @@ void menu(int quantidade){
                 getchar();
                 printf("\n");
                 printf("Digite o email que deseja recuperar: ");
-                fgets(recuperarEmail, 100, stdin);
+                fgets(recuperarEmail, sizeof(usuarios[0].email), stdin);
 
                 while(strchr(recuperarEmail,'@') == NULL){
                     printf("Digitação inválida! Digite um e-mail válido: ");
-                    fgets(recuperarEmail, 100, stdin);
+                    fgets(recuperarEmail, sizeof(usuarios[0].email), stdin);
                     recuperarEmail[strcspn(recuperarEmail, "\n")] = '\0';
                 }
 
@@ -120,7 +120,7 @@ void menu(int quantidade){
                         getchar();
                         printf("\n");
                         printf("Qual o e-mail do usuário que você deseja editar? ");
-                        fgets(recuperarEmail, 100, stdin);
+                        fgets(recuperarEmail, sizeof(usuarios[0].email), stdin);
 
                         recuperarEmail[strcspn(recuperarEmail, "\n")] = '\0';
 
@@ -136,11 +136,11 @@ void menu(int quantidade){
                         getchar();
                         printf("\n");
                         printf("Digite o email que deseja recuperar: ");
-                        fgets(recuperarEmail, 100, stdin);
+                        fgets(recuperarEmail, sizeof(usuarios[0].email), stdin);
 
                         while(strchr(recuperarEmail,'@') == NULL){
                             printf("Digitação inválida! Digite um e-mail válido: ");
-                            fgets(recuperarEmail, 100, stdin);
+                            fgets(recuperarEmail, sizeof(usuarios[0].email), stdin);
                             recuperarEmail[strcspn(recuperarEmail, "\n")] = '\0';
                         }
 
@@ -260,7 +260,7 @@ void incluirusuarios(int quantidadeusuarioss) {
 
 
 void editarusuarios(){
-    char emailValor[100];
+    char emailValor[sizeof(usuarios[0].email)];
     int valorVacina;
     float valorAltura;
     getchar();
